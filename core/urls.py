@@ -1,0 +1,22 @@
+"""
+URL configuration for core project.
+"""
+
+from django.contrib import admin
+from django.urls import include, path
+from django.views.generic import RedirectView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
+urlpatterns = [
+    # Root → Swagger docs
+    path("", RedirectView.as_view(url="/api/docs/", permanent=False)),
+    path("admin/", admin.site.urls),
+    # API Documentation
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    # App endpoints
+    path("api/auth/", include("accounts.urls")),
+    path("api/patients/", include("patients.urls")),
+    path("api/doctors/", include("doctors.urls")),
+    path("api/mappings/", include("mappings.urls")),
+]
